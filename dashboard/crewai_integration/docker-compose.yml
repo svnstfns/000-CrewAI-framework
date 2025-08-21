@@ -1,0 +1,72 @@
+version: '3.8'
+
+services:
+  # Redis for real-time data streaming
+  redis:
+    image: redis:7-alpine
+    container_name: dashboard-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis-data:/data
+    command: redis-server --appendonly yes
+    networks:
+      - dashboard-network
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 3s
+      retries: 3
+
+  # Qdrant for vector storage and historical data
+  qdrant:
+    image: qdrant/qdrant:latest
+    container_name: dashboard-qdrant
+    ports:
+      - "6333:6333"
+      - "6334:6334"
+    volumes:
+      - qdrant-data:/qdrant/storage
+    networks:
+      - dashboard-network
+    environment:
+      - QDRANT__SERVICE__HTTP_PORT=6333
+      - QDRANT__SERVICE__GRPC_PORT=6334
+
+  # Dashboard UI
+  dashboard:
+    image: nginx:alpine
+    container_name: dashboard-ui
+    ports:
+      - "8080:80"
+    volumes:
+      - ../index.html:/usr/share/nginx/html/index.html:ro
+      - ../css:/usr/share/nginx/html/css:ro
+      - ../js:/usr/share/nginx/html/js:ro
+    networks:
+      - dashboard-network
+    depends_on:
+      - redis
+
+  # Redis Commander (Optional - for debugging)
+  redis-commander:
+    image: rediscommander/redis-commander:latest
+    container_name: dashboard-redis-commander
+    environment:
+      - REDIS_HOSTS=local:redis:6379
+    ports:
+      - "8081:8081"
+    networks:
+      - dashboard-network
+    depends_on:
+      - redis
+
+networks:
+  dashboard-network:
+    driver: bridge
+
+volumes:
+  redis-data:
+    driver: local
+  qdrant-data:
+    driver: local

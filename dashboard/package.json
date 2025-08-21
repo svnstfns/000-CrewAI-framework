@@ -1,0 +1,38 @@
+{
+  "name": "multi-agent-dashboard",
+  "version": "1.0.0",
+  "description": "Real-time monitoring dashboard for multi-agent systems",
+  "main": "index.html",
+  "scripts": {
+    "start": "npx live-server --port=8080",
+    "dev": "npx live-server --port=8080 --watch=.",
+    "build": "echo 'No build step required for static site'",
+    "test": "echo 'No tests configured'"
+  },
+  "keywords": [
+    "multi-agent",
+    "dashboard",
+    "monitoring",
+    "websocket",
+    "real-time",
+    "visualization",
+    "dark-mode"
+  ],
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "live-server": "^1.2.2"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/YOUR_USERNAME/multi-agent-dashboard.git"
+  },
+  "bugs": {
+    "url": "https://github.com/YOUR_USERNAME/multi-agent-dashboard/issues"
+  },
+  "homepage": "https://github.com/YOUR_USERNAME/multi-agent-dashboard#readme",
+  "engines": {
+    "node": ">=14.0.0",
+    "npm": ">=6.0.0"
+  }
+}
